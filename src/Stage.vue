@@ -5,8 +5,11 @@
     <div>
 
         <div id="draw">
-            [Middle Mouse] Move Points [Left Click] Add Node [Right Click] Make Segment
-
+<div class="pure-g">
+    <div class="pure-u-1-2">            [Middle Mouse] Add Node  <br> [Left Click]  Move Node   <br>  [Right Click] Make Segment
+</div>
+    <div class="pure-u-1-2" align="right"><img class="coordSys" src="./coordinate_sys.svg" alt=""></div>
+</div>
         </div>
     </div>
 
@@ -23,7 +26,6 @@
     export default {
         data() {
             return {
-                bundler: "Parcel bro",
                 scaler: 10,
                 app: {},
                 points: FiniteModel.getPoints(),
@@ -66,6 +68,7 @@
                 }
 
                 this.drawForces()
+                this.drawLabels();
 
             },
             addPoint(x, y) {
@@ -163,6 +166,21 @@
 
                 }
 
+                function drawLabels(){
+
+                    for(let i in self.points){
+                        let p1 = self.points[i];
+
+                        let text = new PIXI.Text(i,{fontFamily : 'Arial', fontSize: 20, fill : 0x000000, align : 'center'});
+
+                        text.x = p1[0]+10;
+                        text.y = p1[1]+10;
+                                            app.stage.addChild(text);
+
+                    
+                    }
+                }
+
                 function drawForces() {
                     const forcesGraphics = new PIXI.Graphics();
 
@@ -212,7 +230,7 @@
 
                 self.drawSegment = drawSegment;
                 self.drawForces = drawForces;
-
+                self.drawLabels = drawLabels;
 
 
                 // The application will create a canvas element for you that you
@@ -252,7 +270,12 @@
         width: 800px;
         border: solid grey 1px;
         margin: 20px;
+        padding: 5px;
         background: white;
 
+    }
+    .coordSys{
+        height: 80px;
+        text-align: right;
     }
 </style>

@@ -6,8 +6,8 @@ let solve = require('./solve');
 let printData = function(p){
     for(let i in p){
         let a = p[i];
-        if(a < 0.00001) a=0;
-        console.log(i,a)
+        if(Math.abs(a) < 0.000001) a=0;
+        console.log(i,a.toFixed(2))
 
 
     }
@@ -110,7 +110,6 @@ let Model = function(nodes, connections, forces){
             }
         };
 
-        console.log('global_local_matrixg',local_matrix, global_local_matrix)
 
 
     }
@@ -138,7 +137,6 @@ let Model = function(nodes, connections, forces){
     }
     
 
-    console.log(UNKNOWN)
 
 
 
@@ -168,7 +166,6 @@ let Model = function(nodes, connections, forces){
     }
     console.log("GlobalMatrix", GlobalMatrix)
 
-    console.log(reduced, reducedBC)
 
    // let reducedSoln = $.usolve(reduced, reducedBC);
     let soln2 = solve.solve(reduced, reducedBC)
@@ -188,11 +185,9 @@ let Model = function(nodes, connections, forces){
 
     console.log(fullSoln)
 
-    
-   // console.log(reduced, reducedSoln, expand(reduced, soln2))
-  
-    console.log('reactions', $.multiply(GlobalMatrix, fullSoln))
-    //printData(expand(GlobalMatrix, fullSoln))
+    let reactions =  $.multiply(GlobalMatrix, fullSoln)
+    console.log(reactions)
+    printData(reactions)
 
 }
 

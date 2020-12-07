@@ -3,8 +3,7 @@
 <template>
 
   <div>
-      {{points}}
-      {{connections}}
+
     <div id="draw">
             [Middle Mouse] Move Points [Left Click] Add Node [Right Click] Make Segment
 
@@ -81,7 +80,7 @@ export default {
         let self = this;
 
 
-        this.app = new PIXI.Application({ backgroundColor: 0x1099bb });
+        this.app = new PIXI.Application({ backgroundColor: 0xFFFFFF	 });
         let app = this.app;
 
         let noContext = document.getElementById('draw');
@@ -95,7 +94,7 @@ export default {
         // create our little nodeHandler friend..
         const nodeHandler = new PIXI.Graphics();
         nodeHandler.lineStyle(0); // draw a circle, set the lineStyle to zero so the circle doesn't have an outline
-        nodeHandler.beginFill(0xDE3249, 1);
+        nodeHandler.beginFill(0x000000, 1);
         nodeHandler.drawCircle(0, 0, 10);
         nodeHandler.endFill();
         nodeHandler.id = id
@@ -153,7 +152,7 @@ export default {
             let p1 = self.points[node1];
             let p2 = self.points[node2];
             const lineSegment = new PIXI.Graphics()
-            lineSegment.lineStyle(1, 0xff0000, 1)
+            lineSegment.lineStyle(2, 0xff0000, 1)
             lineSegment.moveTo(p1[0], p1[1])
             lineSegment.lineTo(p2[0], p2[1])
             app.stage.addChild(lineSegment);
@@ -178,7 +177,14 @@ export default {
                     forcesGraphics.drawRect(p1[0], p1[1], 5,25);
                     forcesGraphics.endFill();
 
-                    
+                }else if(force[3] == 'Moment'){
+
+                            forcesGraphics.lineStyle(0); // draw a circle, set the lineStyle to zero so the circle doesn't have an outline
+                            forcesGraphics.beginFill(0x00FF00, 1);
+                            forcesGraphics.drawCircle(p1[0], p1[1], 5);
+                            forcesGraphics.endFill();
+
+
                 }else{
                         let a = force[1];
                         let b = force[2];

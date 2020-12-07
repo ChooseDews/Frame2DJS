@@ -3,7 +3,7 @@ let FEM = require('./fem');
 
 let Points = [ [ 200, 300 ], [ 600, 300 ], [ 400, 200 ] ];
 let Connections = [[0,1, 20, 1],[0,2, 20, 1],[1,2, 20, 1]];
-let Forces = [[0,1,0,"Fixed Y"],[0,1,0,"Fixed X"],[1,1,0,"Fixed X"],[1,1,0,"Fixed Y"], [2,0,-20,"Force"], [0,0,-20,"Moment"]];
+let Forces = [[0,1,0,"Fixed Y"],[0,1,0,"Fixed X"],[1,1,0,"Fixed X"],[1,1,0,"Fixed Y"], [2,0,-20,"Force"]];
 
 
 

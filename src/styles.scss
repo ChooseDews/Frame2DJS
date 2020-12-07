@@ -1,23 +1,20 @@
-.center{
-    text-align: center;
+.center {
+  text-align: center;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
 
-  
-  @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
-  
-  *{
-    font-family: 'Source Code Pro', monospace;
-  
-  }
+* {
+  font-family: 'Source Code Pro', monospace;
+}
 
-  .sidebar{
-    float: left; 
-    width: 300px; 
-    min-height: 100vh;
-    background-color: grey;
-  }
+.sidebar {
+  float: left;
+  width: 300px;
+  min-height: 100vh;
+  background-color: grey;
+}
 
-  body{
-      background-color: whitesmoke;
-  }
+body {
+  background-color: whitesmoke;
+}

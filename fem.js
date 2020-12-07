@@ -1,15 +1,11 @@
 let $ = require('mathjs');
-
 let solve = require('./solve');
-
 
 let printData = function(p){
     for(let i in p){
         let a = p[i];
         if(Math.abs(a) < 0.000001) a=0;
         console.log(i,a.toFixed(2))
-
-
     }
 }
 
@@ -73,9 +69,9 @@ let expand = function(A,b){
 let Model = function(nodes, connections, forces){
 
 
-    let E = 1;
-    let I = 1;
-    let A = 1;
+    let E = 70e9;
+    let I = 1e2;
+    let A = 10;
 
     let localMatrixCollection = []
     let GlobalMatrix = zeros(nodes.length*3);
@@ -84,93 +80,57 @@ let Model = function(nodes, connections, forces){
         let p1 = nodes[c[0]]
         let p2 = nodes[c[1]]
         length = Math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
-        let local_matrix = createLocalMatrix(E, I, A, 1)
+        let local_matrix = createLocalMatrix(E, I, A, length)
         localMatrixCollection.push(local_matrix);
 
 
         let T = createTransformationMatrix(c[2])
-
         let global_local_matrix = $.multiply($.multiply($.transpose(T),local_matrix), T)
-       // console.log(c[2], 'yess',global_local_matrix)
 
-        let n = 6
+        let n = 6  //move local matrix to global
         for(let i = 0; i<n; i++){
             for(let j = 0; j<n; j++){
-
                 let row = c[0]*3+i;
                 if(i>2) row = c[1]*3+i-3;
-
 
                 let col = c[0]*3+j;
                 if(j>2) col = c[1]*3+j-3;
 
-
                 GlobalMatrix[row][col] = GlobalMatrix[row][col] + global_local_matrix[i][j]
-
             }
         };
-
-
-
     }
 
 
     let BC = zeros1D(nodes.length*3, false);
     let UNKNOWN = zeros1D(nodes.length*3, false);
-
-
     for(let force of forces){
-        if(force[3] == 'Fixed X'){
-            UNKNOWN[3*force[0]] = true;
-        }
-        if(force[3] == 'Fixed Y'){
-            UNKNOWN[3*force[0]+1] = true;
-        }
+        if(force[3] == 'Fixed X') UNKNOWN[3*force[0]] = true;
+        if(force[3] == 'Fixed Y') UNKNOWN[3*force[0]+1] = true;
         if(force[3] == 'Force'){
             BC[3*force[0]] = force[1];
             BC[3*force[0]+1] = force[2];
-
         }
-        if(force[3] == 'Moment'){
-            UNKNOWN[3*force[0]+2] = true;
-        }
+        if(force[3] == 'Moment') UNKNOWN[3*force[0]+2] = true;
     }
     
-
-
-
-
     let reduced = [];
     let reducedBC = [];
 
-    for(let i in BC){
-        if(!UNKNOWN[i]) reducedBC.push(BC[i])
-    }
-
-    let p = 0;
+    for(let i in BC) if(!UNKNOWN[i]) reducedBC.push(BC[i])
+    
+    let p = 0; //reduce global matrix
     for(let k=0; k<nodes.length*3; k++){
-        
         if(!UNKNOWN[k]){
             reduced[p] = [];
             for(let g=0; g<nodes.length*3; g++){
                 if(!UNKNOWN[g]) reduced[p].push(GlobalMatrix[k][g]);
-
-
             }
             p++;
-
         }
-       
-
-
     }
-    console.log("GlobalMatrix", GlobalMatrix)
 
-
-   // let reducedSoln = $.usolve(reduced, reducedBC);
     let soln2 = solve.solve(reduced, reducedBC)
-
-    //console.log('compare', reducedSoln, soln2)
 
     let fullSoln = [];
     let pp = 0;
@@ -183,10 +143,12 @@ let Model = function(nodes, connections, forces){
         }
     }
 
-    console.log(fullSoln)
 
     let reactions =  $.multiply(GlobalMatrix, fullSoln)
-    console.log(reactions)
+
+    console.log("GlobalMatrix", GlobalMatrix)
+
+    console.log(fullSoln)
     printData(reactions)
 
 }

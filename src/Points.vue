@@ -6,21 +6,82 @@
 
      <div class="title center">Points ({{points.length}})</div>
 
-<hr>
+
     
 
      <div v-for="(p, index) in points" class="coord">
-       {{index+1}}  (<input type="number" v-model="p[0]"/>,<input  type="number" v-model="p[1]"/>)<span @click="remove(index)" class="material-icons">
+       {{index}}  (<input type="number" v-model="p[0]"/>,<input  type="number" v-model="p[1]"/>)<span @click="remove(index)" class="material-icons">
 delete
 </span>
-     </div>
-   
 
-     <div class="coord add">
+     </div>
+<br>
+    <div class="coord">
        New (<input type="number" v-model="add.x"/>,<input v-model="add.y"/>)<span type="number" @click="addPoint()" class="material-icons">
 add_circle
 </span>
 
+
+     <br>
+     <br>
+   
+<hr>
+
+<br>
+
+     <div class="title center">Connections ({{connections.length}})</div>
+      
+
+      <table style="width:100%" class="center">
+  <tr>
+    <th>ID</th>
+    <th>N1</th>
+    <th>N2</th>
+    <th>Angle</th>
+    <th>Length</th>
+
+  </tr>
+  <tr v-for="(c, index) in connections">
+    <td>{{index}}</td>
+    <td>{{c[0]}}</td>
+    <td>{{c[1]}}</td>
+    <td>{{(c[2]).toFixed(2)}}</td>
+        <td>{{(c[3]).toFixed(2)}}</td>
+
+  </tr>
+ 
+</table>
+
+<hr>
+
+<br>
+
+     <div class="title center">Forces ({{forces.length}})</div>
+      
+
+
+      <table style="width:100%" class="center">
+  <tr>
+    <th>ID</th>
+    <th>N</th>
+    <th>X</th>
+     <th>Y</th>
+    <th>Type</th>
+  </tr>
+  <tr v-for="(c, index) in forces">
+    <td>{{index}}</td>
+    <td>{{c[0]}}</td>
+    <td>{{c[1]}}</td>
+    <td>{{(c[2])}}</td>
+        <td>{{(c[3])}}</td>
+
+  </tr>
+ 
+</table>
+
+
+
+ 
 
   </div>
 
@@ -29,16 +90,31 @@ add_circle
 <script>
 import Vue from "vue";
 
+import FiniteModel from './../model';
+
 export default {
-props: ['points'],
   data() {
     return {
       bundler: "Parcel bro",
       pointCount: 20,
-      add:{
-          
-      }
+      points: FiniteModel.getPoints(),
+      connections: FiniteModel.getConnections(),
+      forces: FiniteModel.getForces(),
+
+      add:{}
     };
+  },
+  mounted(){
+    let self = this;
+   FiniteModel.addSubscriber(function(p,c, f){
+       self.points = p;
+      self.connections = c;
+      self.forces = f;
+
+      console.log('forceu updaetr')
+
+       self.$forceUpdate()
+   })
   },
   methods: {
       addPoint(){

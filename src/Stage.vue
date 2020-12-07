@@ -16,7 +16,7 @@
 <script>
     import * as PIXI from 'pixi.js'
 
-    import FiniteModel from './../model';
+    import FiniteModel from './../DataModel.js';
 
 
 

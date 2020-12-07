@@ -1,4 +1,4 @@
-let FEM = require('./fem');
+let FEM = require('./BeamElementFEA');
 
 
 let Points = [ [ 200, 300 ], [ 600, 300 ], [ 400, 200 ] ];
@@ -78,11 +78,9 @@ let getForces = function(){
 
 update()
 
-
-setInterval(function(){
-    FEM([...Points], [...Connections], [...Forces])
-},1000)
-
+let runFEM = function(){
+    return FEM([...Points], [...Connections], [...Forces]);
+}
 
 
 
@@ -96,5 +94,6 @@ module.exports = {
     clearConnections,
     getConnections,
     addForce,
-    getForces
+    getForces,
+    runFEM
 }

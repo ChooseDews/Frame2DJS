@@ -10,11 +10,18 @@
 
 .sidebar {
   float: left;
-  width: 300px;
+  width: 350px;
   min-height: 100vh;
-  background-color: grey;
+  padding: 5px;
+  background-color: #292929;
+  box-sizing: border-box;
+
 }
 
 body {
-  background-color: whitesmoke;
+  background-color: #292929;
+}
+
+.button-small {
+  font-size: 65%;
 }

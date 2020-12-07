@@ -2,7 +2,7 @@
   <div class="pointsHolder">
     <div class="title center">Points ({{points.length}})</div>
     <div v-for="(p, index) in points" class="coord">
-      {{index}} (<input type="number" v-model="p[0]" />,<input type="number" v-model="p[1]" />)<span
+      {{index}} (<input type="number" @change="updatePoint(index, p[0], p[1])" v-model="p[0]" />,<input type="number" @change="updatePoint(index, p[0], p[1])" v-model="p[1]" />)<span
         @click="remove(index)" class="material-icons">
         delete
       </span>
@@ -19,7 +19,7 @@
       <hr>
       <br>
 
-      <div class="title center">Connections ({{connections.length}})</div>
+      <div class="title center">Connections ({{connections.length}}) <a class="pure-button button-small" @click="clearConnections()" href="#">Clear</a></div>
 
 
       <table style="width:100%" class="center">
@@ -67,24 +67,23 @@
 <script>
   import Vue from "vue";
 
-  import FiniteModel from './../model';
+  import FiniteModel from './../DataModel.js';
 
   export default {
     data() {
-      return {
-        bundler: "Parcel bro",
-        pointCount: 20,
-        points: FiniteModel.getPoints(),
+    let pp = JSON.parse(JSON.stringify(FiniteModel.getPoints()))
+
+    return {
+        points: pp,
         connections: FiniteModel.getConnections(),
         forces: FiniteModel.getForces(),
-
         add: {}
       };
     },
     mounted() {
       let self = this;
       FiniteModel.addSubscriber(function (p, c, f) {
-        self.points = p;
+        self.points = JSON.parse(JSON.stringify(p));
         self.connections = c;
         self.forces = f;
 
@@ -94,6 +93,9 @@
       })
     },
     methods: {
+      clearConnections(){
+        FiniteModel.clearConnections()
+      },
       addPoint() {
         let point = [Number(this.add.x), Number(this.add.y)];
         if (isNaN(point[0]) || isNaN(point[1])) return;
@@ -102,6 +104,10 @@
       remove(index) {
         if (this.points.length == 0) return;
         this.points.splice(index, 1)
+      },
+      updatePoint(index, x, y){
+          FiniteModel.movePoint(index, [Number(x), Number(y)])
+
       }
     }
   }
@@ -111,7 +117,6 @@
   .pointsHolder {
 
     width: 100%;
-    background: grey;
 
     .title {
       font-size: 20px;
@@ -119,6 +124,9 @@
 
     }
 
+        .button-small {
+            font-size: 65%;
+        }
     color: white;
 
     padding-top: 20px;

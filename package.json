@@ -1,5 +1,21 @@
 {
   "dependencies": {
-    "mathjs": "^8.1.0"
+    "mathjs": "^8.1.0",
+    "pixi.js": "^5.3.3",
+    "vue": "^2.6.12",
+    "vue-hot-reload-api": "^2.3.4"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.2.0",
+    "cssnano": "^4.1.10",
+    "sass": "^1.29.0",
+    "typescript": "^4.1.2",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html",
+    "build": "parcel build index.html -d docs --public-url ./",
+    "postinstall": "npm install -g parcel"
   }
 }

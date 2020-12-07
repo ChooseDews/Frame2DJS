@@ -3,10 +3,12 @@
 <template>
   <div>
   <div class="sidebar">
-        <Points :points="pointsArray"></Points>
+        <Points></Points>
   </div>
-  <div style="float: left; width: calc(100% - 300px)">
-            <Stage :points="pointsArray"></Stage>
+  <div style="float: left; width: calc(100% - 350px)">
+            <Stage></Stage>
+
+            <Results></Results>
 
   </div>
   </div>
@@ -16,15 +18,15 @@
 <script>
 import Points from "./Points";
 import Stage from "./Stage";
+import Results from "./Results";
 
 export default {
   data() {
     return {
-      bundler: "Parcel bro",
-      pointsArray: [[10,10],[10,50],[70,50],[70,30]]
+     
     };
   },
-  components: {Points, Stage}
+  components: {Points, Stage, Results}
 }
 
 </script>

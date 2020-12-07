@@ -1,5 +1,5 @@
 let $ = require('mathjs');
-let solve = require('./solve');
+let solve = require('./src/gaussJordan');
 
 let printData = function(p){
     for(let i in p){
@@ -150,6 +150,11 @@ let Model = function(nodes, connections, forces){
 
     console.log(fullSoln)
     printData(reactions)
+
+    return {
+        reactions,
+        solution: fullSoln
+    }
 
 }
 

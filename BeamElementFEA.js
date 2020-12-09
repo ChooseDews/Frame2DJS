@@ -69,9 +69,9 @@ let expand = function(A,b){
 let Model = function(nodes, connections, forces){
 
 
-    let E = 70e9;
-    let I = 1e2;
-    let A = 10;
+    let E = 7e9;
+    let I = 1/12;
+    let A = 1;
 
     let localMatrixCollection = []
     let GlobalMatrix = zeros(nodes.length*3);

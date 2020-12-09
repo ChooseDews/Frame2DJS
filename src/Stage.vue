@@ -5,6 +5,7 @@
     <div>
 
         <div id="draw">
+
 <div class="pure-g">
     <div class="pure-u-1-2">            [Middle Mouse] Add Node  <br> [Left Click]  Move Node   <br>  [Right Click] Make Segment
 </div>
@@ -31,7 +32,8 @@
                 points: FiniteModel.getPoints(),
                 forces: FiniteModel.getForces(),
                 connections: FiniteModel.getConnections(),
-                dragging: false
+                dragging: false,
+                scale: 0.01
             };
         },
         mounted() {
@@ -41,10 +43,11 @@
                 self.clear();
                 self.update();
             }, 100)
-            FiniteModel.addSubscriber(function (p, c, f) {
+            FiniteModel.addSubscriber(function (p, c, f, r) {
                 self.points = p;
                 self.connections = c;
                 self.forces = f;
+                self.results = r
 
                 self.$forceUpdate()
             })
@@ -69,6 +72,8 @@
 
                 this.drawForces()
                 this.drawLabels();
+
+                if(this.results) this.drawResults(this.results);
 
             },
             addPoint(x, y) {
@@ -117,6 +122,23 @@
                     app.stage.addChild(nodeHandler);
                 }
 
+
+                function createnodeHandlerDumb(x, y, id, c) {
+                    // create our little nodeHandler friend..
+                    const nodeHandler = new PIXI.Graphics();
+                    nodeHandler.lineStyle(
+                    0); // draw a circle, set the lineStyle to zero so the circle doesn't have an outline
+                    nodeHandler.beginFill(c || 0x000000, 1);
+                    nodeHandler.drawCircle(0, 0, 10);
+                    nodeHandler.endFill();
+                    nodeHandler.id = id+'r';
+        
+                    nodeHandler.x = x;
+                    nodeHandler.y = y;
+                    // add it to the stage
+                    app.stage.addChild(nodeHandler);
+                }
+
                 function onDragStart(event) {
                     this.data = event.data;
                     this.alpha = 0.5;
@@ -158,12 +180,16 @@
                 function drawSegment(node1, node2) {
                     let p1 = self.points[node1];
                     let p2 = self.points[node2];
+                    drawSegmentPoints(p1, p2)
+
+                }
+
+                function drawSegmentPoints(p1, p2, c) {
                     const lineSegment = new PIXI.Graphics()
-                    lineSegment.lineStyle(2, 0xff0000, 1)
+                    lineSegment.lineStyle(2, c || 0xff0000, 1)
                     lineSegment.moveTo(p1[0], p1[1])
                     lineSegment.lineTo(p2[0], p2[1])
                     app.stage.addChild(lineSegment);
-
                 }
 
                 function drawLabels(){
@@ -214,7 +240,7 @@
                             let a = force[1];
                             let b = force[2];
                             let scale = 1 / Math.sqrt(a * a + b * b);
-                            let p2 = [p1[0] + a * scale * 100, p1[1] + b * scale * 100]
+                            let p2 = [p1[0] + a * scale * 50, p1[1] + b * scale * 50]
 
                             const lineSegment = new PIXI.Graphics()
                             lineSegment.lineStyle(4, 0xff890a, 1)
@@ -227,6 +253,41 @@
                     app.stage.addChild(forcesGraphics);
 
                 }
+
+
+                let drawResults = function(results){
+
+
+                    if(!results.solution) return;
+
+                    let solns = results.solution;
+                    let nodeCount = self.points.length;
+                    let points = [];
+
+                    let scale = 0.0001;
+
+                    let largest = 0;
+
+                    let max = Math.max(...solns.map(Math.abs));
+
+                    for(let n in self.points){
+                        n = Number(n);
+                        let p_x = self.points[n][0]+solns[3*(n+1)-3]*(20/max);
+                        let p_y = self.points[n][1]+solns[3*(n+1)-2]*(20/max);
+                        points.push([p_x, p_y])
+                        createnodeHandlerDumb(p_x, p_y, n+'r', 0x008000)
+                    }
+
+                    for(let c of self.connections){
+                        drawSegmentPoints(points[c[0]],points[c[1]], 0x008000)
+                    }
+
+                    console.log(points)
+
+
+                }
+
+                self.drawResults = drawResults;
 
                 self.drawSegment = drawSegment;
                 self.drawForces = drawForces;

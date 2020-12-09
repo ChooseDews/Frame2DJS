@@ -3,42 +3,48 @@
 
       <div class="title center" @click="run()">FEM Results <a class="pure-button button-small" @click="run()" href="#">Run Simulation</a></div>
 
-      <table class="center pure-table" v-if="results.solution">
+   
+
+
+
+
+
+<div class="resultOverflow">
+
+
+
+ <table class="center pure-table" v-if="results.solution">
          <tr>
           <th>N</th>
-          <td  v-for="(c, index) in points">{{index}}</td>
-        </tr>
-        <tr>
           <th>u</th>
-          <td  v-for="(c, index) in points">{{results.solution[3*index].toExponential(4)}}</td>
-        </tr>
-        <tr>
           <th>v</th>
-          <td  v-for="(c, index) in points">{{results.solution[3*index+1].toExponential(4)}}</td>
-        </tr>
-         <tr>
           <th>θ</th>
-          <td  v-for="(c, index) in points">{{results.solution[3*index+2].toExponential(4)}}</td>
-        </tr>
-
-
-
-        <tr>
           <th>F_x</th>
-          <td  v-for="(c, index) in points">{{results.reactions[3*index].toFixed(3)}}</td>
-        </tr>
-
-        <tr>
           <th>F_y</th>
-          <td  v-for="(c, index) in points">{{results.reactions[3*index+1].toFixed(3)}}</td>
-        </tr>
-
-        <tr>
           <th>C</th>
-          <td  v-for="(c, index) in points">{{results.reactions[3*index+2].toFixed(3)}}</td>
+
         </tr>
+        <tr v-for="(c, index) in points">
+          <td>{{index}}</td>
+          <td>{{results.solution[3*index].toExponential(4)}}</td>
+          <td>{{results.solution[3*index+1].toExponential(4)}}</td>
+          <td>{{results.solution[3*index+2].toExponential(4)}}</td>
+
+          <td>{{results.reactions[3*index].toFixed(4)}}</td>
+          <td>{{results.reactions[3*index+1].toExponential(4)}}</td>
+          <td>{{results.reactions[3*index+2].toExponential(4)}}</td>
+        </tr>
+        
      
       </table>
+
+</div>
+
+
+
+
+
+
     </div>
 
 </template>
@@ -87,6 +93,12 @@
 
     width: 100%;
 
+    .resultOverflow{
+      max-width: 100%;
+      max-height: 100vh;
+      overflow: auto;
+    }
+
     .title {
       font-size: 20px;
       padding-bottom: 20px;
@@ -94,13 +106,13 @@
     }
 
     tr td{
-      width: 140px;
       border: solid 1px grey;
       margin: 0;
+      min-width: 100px;
 
     }
     tr th{
-      width: 40px;
+      width: 60px;
             border-bottom: solid 1px grey;
 
     }

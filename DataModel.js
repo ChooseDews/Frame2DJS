@@ -3,9 +3,9 @@ let FEM = require('./BeamElementFEA');
 
 let Points = [ [ 200, 300 ], [ 600, 300 ], [ 400, 200 ] ];
 let Connections = [[0,1, 20, 1],[0,2, 20, 1],[1,2, 20, 1]];
-let Forces = [[0,1,0,"Fixed Y"],[0,1,0,"Fixed X"],[1,1,0,"Fixed X"],[1,1,0,"Fixed Y"], [2,0,-20,"Force"]];
+let Forces = [[0,1,0,"Fixed Y"],[0,1,0,"Moment"],[0,1,0,"Fixed X"],[1,1,0,"Fixed Y"], [2,0,-2000,"Force"]];
 
-
+let Results = {}
 
 let removePoint = function(index){
     Points.splice(index, 1)
@@ -25,7 +25,7 @@ let update = function(){
 
 
 
-    for(let sub of subs) sub(Points, Connections, Forces);
+    for(let sub of subs) sub(Points, Connections, Forces, Results);
 }
 
 
@@ -39,6 +39,8 @@ let getPoints = function(){
 
 let addPoint = function(point){
     Points = [...Points, point]
+    Results = {}
+
     update()
 }
 
@@ -46,23 +48,37 @@ let movePoint = function(index, point){
     for(let i in Points){
         if(i == index) Points[i] = point;
     }
+    Results = {}
+
     update()
 }
 
 
 
 let addForce = function(node,x,y,type){
-    Forces.add([x,y,type]);
+    Forces.push([node, x,y,type]);
+    Results = {}
+
     update();
 }
 
 let addConnection = function(node1, node2){
     Connections.push([node1, node2, 'angle', 'length']);
+    Results = {}
+    update();
+}
+
+
+let clearForces = function(){
+    Forces = [];
+    Results = {}
+
     update();
 }
 
 let clearConnections = function(){
     Connections = [];
+    Results = {}
 
     update();
 }
@@ -79,7 +95,10 @@ let getForces = function(){
 update()
 
 let runFEM = function(){
-    return FEM([...Points], [...Connections], [...Forces]);
+    Results = FEM([...Points], [...Connections], [...Forces]);
+    update()
+
+    return Results
 }
 
 
@@ -95,5 +114,6 @@ module.exports = {
     getConnections,
     addForce,
     getForces,
-    runFEM
+    runFEM,
+    clearForces
 }

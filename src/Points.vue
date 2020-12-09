@@ -42,7 +42,7 @@
       <hr>
       <br>
 
-      <div class="title center">Forces ({{forces.length}})</div>
+      <div class="title center">Forces ({{forces.length}})  <a class="pure-button button-small" @click="clearForces()" href="#">Clear</a></div>
 
       <table style="width:100%" class="center">
         <tr>
@@ -61,6 +61,24 @@
         </tr>
       </table>
     </div>
+    <div class="addForce">
+      <br>
+      <div class="title">Add Force</div>
+      <select v-model="newForce.node">
+        <option v-for="(point, index) in points" :value="index">{{index}}</option>
+      </select>
+    <select v-model="newForce.type">
+      <option>Fixed X</option>
+      <option>Fixed Y</option>
+      <option>Moment</option>
+      <option>Force</option>
+    </select>
+    <input v-model="newForce.x" placeholder="X Force" />
+    <input v-model="newForce.y" placeholder="Y Force"/><span type="number" @click="addForce()"
+        class="material-icons">
+        add_circle
+      </span>
+    </div>
 
 </template>
 
@@ -77,7 +95,8 @@
         points: pp,
         connections: FiniteModel.getConnections(),
         forces: FiniteModel.getForces(),
-        add: {}
+        add: {},
+        newForce: {}
       };
     },
     mounted() {
@@ -96,10 +115,20 @@
       clearConnections(){
         FiniteModel.clearConnections()
       },
+       clearForces(){
+        FiniteModel.clearForces()
+      },
       addPoint() {
         let point = [Number(this.add.x), Number(this.add.y)];
         if (isNaN(point[0]) || isNaN(point[1])) return;
         this.points.push(point)
+      },
+      addForce(){
+        if(!isNaN(Number(this.newForce.node))){
+        FiniteModel.addForce(Number(this.newForce.node),Number(this.newForce.x) || 0, Number(this.newForce.y) || 0,this.newForce.type)
+        this.newForce = {};
+        }
+        
       },
       remove(index) {
         if (this.points.length == 0) return;
@@ -114,6 +143,9 @@
 </script>
 
 <style lang="scss" scoped>
+
+
+
   .pointsHolder {
 
     width: 100%;
@@ -165,4 +197,15 @@
 
 
   }
+
+
+
+
+.addForce{
+  text-align: center;
+  input{
+    width: 60px;
+  }
+
+}
 </style>

@@ -5,12 +5,16 @@
   <div class="sidebar">
         <Points></Points>
   </div>
-  <div style="float: left; width: calc(100% - 350px)">
+  <div style="float: left; width: 850px">
 
     <h2>2D Beam Element Frame FEM <small>John Dews 2020</small></h2>
             <Stage></Stage>
 
+  </div>
+   <div style="float: left; width: calc(100% - 1200px)">
             <Results></Results>
+
+    
 
   </div>
   </div>

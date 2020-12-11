@@ -11,7 +11,7 @@ let printData = function(p){
 
 let createLocalMatrix = function(E, I, A, L){
     let a_1 = E*A/L;
-    let a_2 = E*I/(L**3);
+    let a_2 = E*I/(L*L*L);
     return [
         [a_1, 0, 0, -a_1, 0, 0],
         [0, 12*a_2, 6*L*a_2, 0, -12*a_2, 6*L*a_2],
@@ -23,8 +23,8 @@ let createLocalMatrix = function(E, I, A, L){
 }
 
 
-let createTransformationMatrix = function(angle){
-    let a = Math.PI*angle/180
+let createTransformationMatrix = function(p1, p2){
+    let a = Math.atan2(p1[1]-p2[1],p1[0]-p2[0])+Math.PI
     return [
         [Math.cos(a), Math.sin(a), 0, 0, 0, 0],
         [-Math.sin(a), Math.cos(a), 0, 0, 0, 0],
@@ -66,12 +66,12 @@ let expand = function(A,b){
 
 
 
-let Model = function(nodes, connections, forces){
+let Model = function(nodes, connections, forces, E, I ,A){
 
 
-    let E = 7e9;
-    let I = 1/12;
-    let A = 1;
+    E = E || 1;
+    I = I || 1/12;
+    A = A || 1;
 
     let localMatrixCollection = []
     let GlobalMatrix = zeros(nodes.length*3);
@@ -84,7 +84,7 @@ let Model = function(nodes, connections, forces){
         localMatrixCollection.push(local_matrix);
 
 
-        let T = createTransformationMatrix(c[2])
+        let T = createTransformationMatrix(p1,p2)
         let global_local_matrix = $.multiply($.multiply($.transpose(T),local_matrix), T)
 
         let n = 6  //move local matrix to global
@@ -117,6 +117,7 @@ let Model = function(nodes, connections, forces){
     let reduced = [];
     let reducedBC = [];
 
+
     for(let i in BC) if(!UNKNOWN[i]) reducedBC.push(BC[i])
     
     let p = 0; //reduce global matrix
@@ -146,10 +147,7 @@ let Model = function(nodes, connections, forces){
 
     let reactions =  $.multiply(GlobalMatrix, fullSoln)
 
-    console.log("GlobalMatrix", GlobalMatrix)
-
-    console.log(fullSoln)
-    printData(reactions)
+ 
 
     return {
         reactions,

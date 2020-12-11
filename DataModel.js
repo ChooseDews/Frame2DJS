@@ -3,7 +3,7 @@ let FEM = require('./BeamElementFEA');
 
 let Points = [ [ 200, 300 ], [ 600, 300 ], [ 400, 200 ] ];
 let Connections = [[0,1, 20, 1],[0,2, 20, 1],[1,2, 20, 1]];
-let Forces = [[0,1,0,"Fixed Y"],[0,1,0,"Moment"],[0,1,0,"Fixed X"],[1,1,0,"Fixed Y"], [2,0,-2000,"Force"]];
+let Forces = [[0,1,0,"Fixed Y"],[0,1,0,"Fixed X"],[1,1,0,"Fixed Y"], [2,0,-2000,"Force"]];
 
 let Results = {}
 
@@ -94,8 +94,8 @@ let getForces = function(){
 
 update()
 
-let runFEM = function(){
-    Results = FEM([...Points], [...Connections], [...Forces]);
+let runFEM = function(E, I, A){
+    Results = FEM([...Points], [...Connections], [...Forces], E, I, A);
     update()
 
     return Results

@@ -106,8 +106,6 @@
         self.connections = c;
         self.forces = f;
 
-        console.log('forceu updaetr')
-
         self.$forceUpdate()
       })
     },

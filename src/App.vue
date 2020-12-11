@@ -11,7 +11,7 @@
             <Stage></Stage>
 
   </div>
-   <div style="float: left; width: calc(100% - 1200px)">
+   <div style="float: left; min-width: 1000px; width: calc(100% - 1200px)">
             <Results></Results>
 
     

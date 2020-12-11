@@ -167,9 +167,7 @@
                 let LSP = [];
 
                 function rightclick(event) {
-                    console.log('right click', event, this.id)
                     LSP.push(this.id)
-                    console.log(LSP)
                     if (LSP.length == 2) {
                         if (LSP[0] != LSP[1]) FiniteModel.addConnection(...LSP)
                         LSP = [];
@@ -282,7 +280,6 @@
                         drawSegmentPoints(points[c[0]],points[c[1]], 0x008000)
                     }
 
-                    console.log(points)
 
 
                 }
@@ -304,7 +301,6 @@
                 function onClick(event) {
                     if (event.data.button == 4) return
                     if (event.data.originalEvent.button == 1) {
-                        console.log(event.data.global.y)
                         createnodeHandler(event.data.global.x, event.data.global.y)
                         self.addPoint(event.data.global.x, event.data.global.y)
                     }

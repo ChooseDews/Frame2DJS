@@ -1,6 +1,10 @@
 <template>
   <div class="resultsHolder">
 
+      E:<input type="number" v-model="material.E" placeholder="E" />
+      I:<input type="number" v-model="material.I" placeholder="I" />
+      A:<input type="number" v-model="material.A" placeholder="A" />
+
       <div class="title center" @click="run()">FEM Results <a class="pure-button button-small" @click="run()" href="#">Run Simulation</a></div>
 
    
@@ -26,13 +30,13 @@
         </tr>
         <tr v-for="(c, index) in points">
           <td>{{index}}</td>
-          <td>{{results.solution[3*index].toExponential(4)}}</td>
-          <td>{{results.solution[3*index+1].toExponential(4)}}</td>
-          <td>{{results.solution[3*index+2].toExponential(4)}}</td>
+          <td>{{results.solution[3*index].toExponential(10)}}</td>
+          <td>{{results.solution[3*index+1].toExponential(10)}}</td>
+          <td>{{results.solution[3*index+2].toExponential(10)}}</td>
 
-          <td>{{results.reactions[3*index].toFixed(4)}}</td>
-          <td>{{results.reactions[3*index+1].toExponential(4)}}</td>
-          <td>{{results.reactions[3*index+2].toExponential(4)}}</td>
+          <td>{{results.reactions[3*index].toExponential(10)}}</td>
+          <td>{{results.reactions[3*index+1].toExponential(10)}}</td>
+          <td>{{results.reactions[3*index+2].toExponential(10)}}</td>
         </tr>
         
      
@@ -62,7 +66,12 @@
         points: pp,
         connections: FiniteModel.getConnections(),
         forces: FiniteModel.getForces(),
-        results: {}
+        results: {},
+        material: {
+          E: 1,
+          I: 1,
+          A: 1
+        }
       };
     },
     mounted() {
@@ -77,7 +86,7 @@
     },
     methods: {
       run(){
-        this.results = FiniteModel.runFEM()
+        this.results = FiniteModel.runFEM(this.material.E, this.material.I, this.material.A)
         console.log(this.results.reactions)
 
       }
@@ -88,6 +97,8 @@
 
 <style lang="scss" scoped>
   .resultsHolder {
+
+    padding: 20px;
 
     background: #292929;
 
@@ -108,7 +119,8 @@
     tr td{
       border: solid 1px grey;
       margin: 0;
-      min-width: 100px;
+      width: 140px;
+      font-size: 12px;
 
     }
     tr th{

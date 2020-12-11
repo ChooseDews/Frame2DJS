@@ -6,8 +6,8 @@
         <Points></Points>
   </div>
   <div style="float: left; width: 850px">
+    <h2 align="center">2D Beam Element Frame FEM <small>John Dews 2020</small></h2>
 
-    <h2>2D Beam Element Frame FEM <small>John Dews 2020</small></h2>
             <Stage></Stage>
 
   </div>

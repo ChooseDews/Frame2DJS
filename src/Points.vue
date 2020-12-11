@@ -119,11 +119,11 @@
       addPoint() {
         let point = [Number(this.add.x), Number(this.add.y)];
         if (isNaN(point[0]) || isNaN(point[1])) return;
-        this.points.push(point)
+        FiniteModel.addPoint(point)
       },
       addForce(){
         if(!isNaN(Number(this.newForce.node))){
-        FiniteModel.addForce(Number(this.newForce.node),Number(this.newForce.x) || 0, Number(this.newForce.y) || 0,this.newForce.type)
+        FiniteModel.addForce(Number(this.newForce.node),Number(this.newForce.x) || 0, Number(this.newForce.y) || 0,this.newForce.type || 'Force')
         this.newForce = {};
         }
         
